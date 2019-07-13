@@ -5,6 +5,8 @@ import numpy as np
 import time
 
 # img = cv2.imread('i.jpg')
+#
+#
 # def draw_circle(event, x, y, flags, param):
 #     if event == cv2.EVENT_LBUTTONDBLCLK:
 #         cv2.circle(img, (x, y), 100, (255, 255, 0), 3)
@@ -13,13 +15,11 @@ import time
 # cv2.namedWindow('image')
 # cv2.setMouseCallback('image', draw_circle)
 #
-# while (1):
+# while ():
 #     cv2.imshow('image', img)
 #     if cv2.waitKey(100) == ord('q'):  # 等待100毫秒 刷新一次显示图像
 #         break
 # cv2.destroyAllWindows()
-#
-
 
 # 当鼠标按下时变为True
 drawing = False
@@ -43,6 +43,7 @@ def draw_circle(event, x, y, flags, param):
             else:
                 # 绘制圆圈，小圆点连在一起就成了线
                 cv2.circle(img, (x, y), 3, (0, 0, 255), -1)
+
     # 当鼠标松开停止绘画。
     elif event == cv2.EVENT_LBUTTONUP:
         drawing == False
