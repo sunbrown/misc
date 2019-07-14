@@ -18,7 +18,12 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
 
     # ------------按住左键或者右键开始勾画------------
     if event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_LBUTTON \
-            or event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_RBUTTON:  # 鼠标移动
+            or event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_RBUTTON \
+            or event == cv2.EVENT_LBUTTONDOWN \
+            or event == cv2.EVENT_RBUTTONDOWN \
+            or event == cv2.EVENT_LBUTTONDBLCLK \
+            or event == cv2.EVENT_RBUTTONDBLCLK :  # 鼠标移动
+
         pointsCount = pointsCount + 1
         # ------------感觉这里没有用？2018年8月25日20:06:42------------
         # ------------为了保存绘制的区域，画的点稍晚清零------------
@@ -43,20 +48,22 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
     # --------------左键抬起，画mask--------------------------------------------------------
     elif event == cv2.EVENT_LBUTTONUP:
         mode = True
-        print('横切')
         ROI_byMouse()
         ROI_bymouse_flag = 1
         lsPointsChoose = []
         tpPointsChoose = []
+        print('横切')
     # --------------右键抬起，画mask--------------------------------------------------------
     elif event == cv2.EVENT_RBUTTONUP:
         mode = False
-        print('纵切')
         ROI_byMouse()
         ROI_bymouse_flag = 1
         lsPointsChoose = []
         tpPointsChoose = []
-
+        print('纵切')
+    else:
+        pass
+        # print('Do nothing!')
 
 def ROI_byMouse():
     global src, ROI, ROI_flag, mask2, mode
