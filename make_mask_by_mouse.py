@@ -6,7 +6,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import csv
 import pandas as pd
-import pickle
+
 
 
 
@@ -121,30 +121,40 @@ def ROI_byMouse():
 if __name__ == '__main__':
     read_path = r'D:\greyimage'
     csv_path = r'report.csv'
-    log_dir = r'log.txt'
-    ff = open(log_dir, 'a+')
-    file_list = []
-    if os.path.exists(log_dir):
-        ff = open(log_dir, 'r+')
-        for line in ff:
-            line = line.strip('\n')
-            file_list.append(line)
-
-    # save_path = 'E' + read_path[1:len(read_path)]
+    row_ledge = 16  # 定义行间距和字体大小
+    row_length = 115  # 定义行长度
+    #  ------进度读取--------
+    done_dir = r'done.txt'
+    done = 0
+    if os.path.exists(done_dir):
+        ff = open(done_dir, 'r+')
+        ff.seek(0)
+        done = ff.read()
+        if done:
+            done = int(done)
+        else:
+            done = 0
+    else:
+        ff = open(done_dir, 'w+')
+    #  --------变量初始化----------
     mode = True
     lsPointsChoose = []
     tpPointsChoose = []
-    pointsCount, count, k = 0, 0, 0
+    pointsCount, count, k, current = 0, 0, 0, 0
     pointsMax = 3000000
     # -------遍历所有的目录和文件，包括子文件夹------------
     for root, dirs, files in os.walk(read_path):
         for file in files:
-            if file in file_list:
+            if done > current:
+                print('第{}张图片'.format(current+1))
+                current += 1
                 continue
             else:
+                print('第{}张图片'.format(current+1))
                 ck_id = int(root.split('\\')[-1])
                 img_path = os.path.join(root, file)
                 save_path = 'E' + root[1:len(root)]
+                info = '检查号：{}, 图片目录：{}'.format(ck_id, img_path)
                 img = cv2.imread(img_path)
                 # time.sleep(0.05)
                 img2 = img.copy()
@@ -159,18 +169,27 @@ if __name__ == '__main__':
                         s = df.loc[df['check_id'] == ck_id, :]
                         a = s.DES
                         # print(a)
-                white_bg = Image.new('RGB', (1500, 200), 'white')
-                draw = ImageDraw.Draw(white_bg)  # 图片上打印
-                font = ImageFont.truetype("simhei.ttf", 15, encoding="utf-8")  # 参数1：字体文件路径，参数2：字体大小
                 j = 0
+                white_bg = Image.new('RGB', (1700, 200), 'white')  # 定义文字框背景
+                draw = ImageDraw.Draw(white_bg)  # 图片上打印
+                font = ImageFont.truetype("simhei.ttf", row_ledge, encoding="utf-8")  # 参数1：字体文件路径，参数2：字体大小
+                draw.text((0, 0), info, (0, 0, 255), font=font)  # 参数：位置坐标；打印文字；文字颜色；字体
                 for i in a:
-                    if len(i) > 100:
-                        draw.text((0, j), i[0:100], (255, 0, 0), font=font)
-                        draw.text((30, j+20), i[100:-1], (255, 0, 0), font=font)
-                        j += 40
+                    #  -----------------------换行控制----------------------------------
+                    if len(i) > row_length:
+                        row_count = int((len(i) + row_length - 1) / row_length)  # 向上整除得需要打印的行数
+                        for jj in range(row_count):
+                            if len(i[jj * row_length:-1]) > row_length:
+                                draw.text((0, j + (jj + 1) * row_ledge), i[jj * row_length:(jj + 1) * row_length],
+                                          (255, 0, 0), font=font)
+                            else:
+                                draw.text((0, j + (jj + 1) * row_ledge), i[jj * row_length:len(i)], (255, 0, 0),
+                                          font=font)
+                        j += row_count * row_ledge
                     else:
-                        draw.text((0, j), i[0:100], (255, 0, 0), font=font)  # 参数1：打印坐标，参数2：文本，参数3：字体颜色，参数4：字体
-                        j += 20
+                        draw.text((0, j + row_ledge), i[0:row_length], (255, 0, 0),
+                                  font=font)  # 参数1：打印坐标，参数2：文本，参数3：字体颜色，参数4：字体
+                        j += row_ledge
                 # --------------PIL图片转cv2 图片--------------
                 texted_bg = cv2.cvtColor(np.array(white_bg), cv2.COLOR_RGB2BGR)
                 cv2.namedWindow('text', 1)
@@ -197,16 +216,20 @@ if __name__ == '__main__':
                         print('重新扣图')
                     # ------------空格键下一张,Q键下个文件夹，按ESC退出程序------------------------------------------------
                     if k == 32:
-                        file_list.append(file)
-                        ff.writelines(file+"\n")
+                        # file_list.append(file)
+                        current += 1
+                        ff.seek(0)
+                        ff.write(str(current))
+                        # ff.writelines(file+"\n")
                         break
-                    if k == ord('q') or k == 27:
+                    if k == 27:
                         break
-            if k == ord('q') or k == 27:
-                print('下个文件夹')
+            # if k == ord('q'):
+            #     print('下个文件夹')
+            #     break
+            if k == 27:
                 break
         if k == 27:
             print('程序终止')
-
             ff.close()
             break
