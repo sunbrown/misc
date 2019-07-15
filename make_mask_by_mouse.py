@@ -15,7 +15,8 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
     global img, img2, point1, count, pointsMax, mode
     global lsPointsChoose, tpPointsChoose  # 存入选择的点
     global pointsCount  # 对鼠标按下的点计数
-    global img2, ROI_bymouse_flag
+    global img2, mouse_flag
+    mouse_flag = True
 
     # ------------按住左键或者右键开始勾画------------
     if event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_LBUTTON \
@@ -25,6 +26,8 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
             or event == cv2.EVENT_LBUTTONDBLCLK \
             or event == cv2.EVENT_RBUTTONDBLCLK:  # 鼠标移动
 
+        if event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_RBUTTON:
+            mouse_flag = False
         pointsCount = pointsCount + 1
         # ------------感觉这里没有用？2018年8月25日20:06:42------------
         # ------------为了保存绘制的区域，画的点稍晚清零------------
@@ -35,7 +38,7 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
         point1 = (x, y)
         # print(x, y)
         # ------------画圆圈------------
-        cv2.circle(img2, point1, 1, (0, 255, 0), 1)
+        # cv2.circle(img2, point1, 1, (0, 255, 0), 1)
 
         # ------------将选取的点保存到list列表里------------
         lsPointsChoose.append([x, y])  # 用于转化为darry 提取多边形ROI
@@ -44,13 +47,18 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
         # print(len(tpPointsChoose))
         for i in range(len(tpPointsChoose) - 1):
             # print('i', i)
-            cv2.line(img2, tpPointsChoose[i], tpPointsChoose[i + 1], (0, 0, 255), 3) # 最后一个参数为线宽
+            if mouse_flag:
+                cv2.line(img2, tpPointsChoose[i], tpPointsChoose[i + 1], (0, 0, 255), 3) # 最后一个参数为线宽
+            else:
+                cv2.line(img2, tpPointsChoose[i], tpPointsChoose[i + 1], (255, 0, 0), 3) # 最后一个参数为线宽
+
+
         cv2.imshow('src', img2)
     # --------------左键抬起，画mask--------------------------------------------------------
     elif event == cv2.EVENT_LBUTTONUP:
         mode = True
         ROI_byMouse()
-        ROI_bymouse_flag = 1
+        mouse_flag = 1
         lsPointsChoose = []
         tpPointsChoose = []
         print('横切')
@@ -58,7 +66,7 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
     elif event == cv2.EVENT_RBUTTONUP:
         mode = False
         ROI_byMouse()
-        ROI_bymouse_flag = 1
+        mouse_flag = 1
         lsPointsChoose = []
         tpPointsChoose = []
         print('纵切')
