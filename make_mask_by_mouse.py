@@ -221,23 +221,27 @@ if __name__ == '__main__':
                     # ------------按R键，重新扣图------------------------------------------------
                     if k == 114:
                         img2 = img.copy()
-                        print('重新扣图')
                     # ------------空格键下一张,Q键下个文件夹，按ESC退出程序------------------------------------------------
                     if k == 32:
                         # file_list.append(file)
                         current += 1
                         ff.seek(0)
+                        ff.truncate()
                         ff.write(str(current))
                         # ff.writelines(file+"\n")
                         break
+                    if k == ord('q'):
+                        current -= 1
+                        ff.seek(0)
+                        ff.truncate()
+                        ff.write(str(current))
+                        print('回滚上一张图片')
+                        break
                     if k == 27:
                         break
-            # if k == ord('q'):
-            #     print('下个文件夹')
-            #     break
-            if k == 27:
+            if k == 27 or k == ord('q'):
                 break
-        if k == 27:
+        if k == 27 or k == ord('q'):
             print('程序终止')
             ff.close()
             break
