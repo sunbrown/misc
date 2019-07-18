@@ -75,7 +75,7 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
         # print('Do nothing!')
 
 def ROI_byMouse():
-    global src, ROI, ROI_flag, mask2, mode
+    global src, ROI, ROI_flag, mask2, mode, save_path_h, save_path_v
     mask = np.zeros(img.shape, np.uint8)
     pts = np.array([lsPointsChoose], np.int32)  # pts是多边形的顶点列表（顶点集）
     pts = pts.reshape((-1, 1, 2))
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     #  ------进度读取--------
     done_dir = r'done.txt'
     done = 0
-    if os.path.exists(done_dir):
+    if os.path.exists(done_dir):  # 读取进度文件
         ff = open(done_dir, 'r+')
         ff.seek(0)
         done = ff.read()
@@ -142,7 +142,7 @@ if __name__ == '__main__':
             done = int(done)
         else:
             done = 0
-    else:
+    else:  # 进度文件不存在创建一个
         ff = open(done_dir, 'w+')
     #  --------变量初始化----------
     mode = True
@@ -150,6 +150,7 @@ if __name__ == '__main__':
     tpPointsChoose = []
     pointsCount, count, k, current = 0, 0, 0, 0
     pointsMax = 3000000
+    save_path_h, save_path_v = '', ''
     # -------遍历所有的目录和文件，包括子文件夹------------
     for root, dirs, files in os.walk(read_path):
         for file in files:
@@ -163,6 +164,7 @@ if __name__ == '__main__':
                 img_path = os.path.join(root, file)
                 save_path = 'E' + root[1:len(root)]
                 info = '检查号：{}, 图片目录：{}'.format(ck_id, img_path)
+                info1 = '按R重画，按空格下一张或者跳过，按Q上一张(需要重新运行程序)，按ESC退出'
                 img = cv2.imread(img_path)
                 # time.sleep(0.05)
                 img2 = img.copy()
@@ -177,11 +179,13 @@ if __name__ == '__main__':
                         s = df.loc[df['check_id'] == ck_id, :]
                         a = s.DES
                         # print(a)
-                j = 0
+                j = 2*row_ledge
                 white_bg = Image.new('RGB', (1700, 200), 'white')  # 定义文字框背景
                 draw = ImageDraw.Draw(white_bg)  # 图片上打印
                 font = ImageFont.truetype("simhei.ttf", row_ledge, encoding="utf-8")  # 参数1：字体文件路径，参数2：字体大小
-                draw.text((0, 0), info, (0, 0, 255), font=font)  # 参数：位置坐标；打印文字；文字颜色；字体
+                font1 = ImageFont.truetype("simhei.ttf", 2*row_ledge, encoding="utf-8")  # 参数1：字体文件路径，参数2：字体大小
+                draw.text((0, 0), info1, (0, 0, 255), font=font1)   # 提示文字
+                draw.text((0, 2*row_ledge), info, (255, 0, 250), font=font)  # 参数：位置坐标；打印文字；文字颜色；字体
                 for i in a:
                     #  -----------------------换行控制----------------------------------
                     if len(i) > row_length:
@@ -220,6 +224,16 @@ if __name__ == '__main__':
                     #     print(k)
                     # ------------按R键，重新扣图------------------------------------------------
                     if k == 114:
+                        if os.path.exists(save_path + '/H_' + file[0:-4] + '.png'):
+                            os.remove(save_path + '/H_' + file[0:-4] + '.png')
+                            print('横切文件已删除')
+                        else:
+                            print("横切文件不存在！")
+                        if os.path.exists(save_path + '/V_' + file[0:-4] + '.png'):
+                            os.remove(save_path + '/V_' + file[0:-4] + '.png')
+                            print('纵切文件已删除')
+                        else:
+                            print("纵切文件不存在！")
                         img2 = img.copy()
                     # ------------空格键下一张,Q键下个文件夹，按ESC退出程序------------------------------------------------
                     if k == 32:
@@ -244,4 +258,5 @@ if __name__ == '__main__':
         if k == 27 or k == ord('q'):
             print('程序终止')
             ff.close()
+            cv2.destroyAllWindows()
             break
