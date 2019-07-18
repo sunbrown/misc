@@ -226,14 +226,14 @@ if __name__ == '__main__':
                     if k == 114:
                         if os.path.exists(save_path + '/H_' + file[0:-4] + '.png'):
                             os.remove(save_path + '/H_' + file[0:-4] + '.png')
-                            print('横切文件已删除')
+                            print('已删除第{}张'.format(current+1) + '横切')
                         else:
-                            print("横切文件不存在！")
+                            print('不存在第{}张'.format(current+1) + "横切")
                         if os.path.exists(save_path + '/V_' + file[0:-4] + '.png'):
                             os.remove(save_path + '/V_' + file[0:-4] + '.png')
-                            print('纵切文件已删除')
+                            print('已删除第{}张'.format(current+1) + '纵切')
                         else:
-                            print("纵切文件不存在！")
+                            print('不存在第{}张'.format(current+1) + "纵切")
                         img2 = img.copy()
                     # ------------空格键下一张,Q键下个文件夹，按ESC退出程序------------------------------------------------
                     if k == 32:
