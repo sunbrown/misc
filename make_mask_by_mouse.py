@@ -1,17 +1,16 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
+# @Author  : Brown
+
 import cv2
 import numpy as np
-import time
 import os
 from PIL import Image, ImageDraw, ImageFont
-import csv
 import pandas as pd
 
 
-
-
 # -----------------------主函数------------------------------------------
-def on_mouse(event, x, y, flags, param=0, pathImg=0):
+def on_mouse(event, x, y, flags, param=0):
     global img, img2, point1, count, pointsMax, mode
     global lsPointsChoose, tpPointsChoose  # 存入选择的点
     global pointsCount  # 对鼠标按下的点计数
@@ -29,35 +28,26 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
         if event == cv2.EVENT_MOUSEMOVE and flags == cv2.EVENT_FLAG_RBUTTON:
             mouse_flag = False
         pointsCount = pointsCount + 1
-        # ------------感觉这里没有用？2018年8月25日20:06:42------------
-        # ------------为了保存绘制的区域，画的点稍晚清零------------
-        # if (pointsCount == pointsMax + 1):
-        #     pointsCount = 0
-        #     tpPointsChoose = []
-        # print('pointsCount:', pointsCount)
         point1 = (x, y)
         # print(x, y)
         # ------------画圆圈------------
         # cv2.circle(img2, point1, 1, (0, 255, 0), 1)
 
         # ------------将选取的点保存到list列表里------------
-        lsPointsChoose.append([x, y])  # 用于转化为darry 提取多边形ROI
-        tpPointsChoose.append((x, y))  # 用于画点
+        lsPointsChoose.append([x, y])
+        tpPointsChoose.append((x, y))
         # ------------将鼠标选的点用直线连起来------------------------------------
         # print(len(tpPointsChoose))
-        for i in range(len(tpPointsChoose) - 1):
-            # print('i', i)
+        for ii in range(len(tpPointsChoose) - 1):
             if mouse_flag:
-                cv2.line(img2, tpPointsChoose[i], tpPointsChoose[i + 1], (0, 0, 255), 3) # 最后一个参数为线宽
+                cv2.line(img2, tpPointsChoose[ii], tpPointsChoose[ii + 1], (0, 0, 255), 3)  # 最后一个参数为线宽
             else:
-                cv2.line(img2, tpPointsChoose[i], tpPointsChoose[i + 1], (255, 0, 0), 3) # 最后一个参数为线宽
-
-
+                cv2.line(img2, tpPointsChoose[ii], tpPointsChoose[ii + 1], (255, 0, 0), 3)  # 最后一个参数为线宽
         cv2.imshow('src', img2)
     # --------------左键抬起，画mask--------------------------------------------------------
     elif event == cv2.EVENT_LBUTTONUP:
         mode = True
-        ROI_byMouse()
+        roi_by_mouse()
         mouse_flag = 1
         lsPointsChoose = []
         tpPointsChoose = []
@@ -65,7 +55,7 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
     # --------------右键抬起，画mask--------------------------------------------------------
     elif event == cv2.EVENT_RBUTTONUP:
         mode = False
-        ROI_byMouse()
+        roi_by_mouse()
         mouse_flag = 1
         lsPointsChoose = []
         tpPointsChoose = []
@@ -74,8 +64,9 @@ def on_mouse(event, x, y, flags, param=0, pathImg=0):
         pass
         # print('Do nothing!')
 
-def ROI_byMouse():
-    global src, ROI, ROI_flag, mask2, mode, save_path_h, save_path_v
+
+def roi_by_mouse():
+    global ROI, mask2, mode, save_path_h, save_path_v
     mask = np.zeros(img.shape, np.uint8)
     pts = np.array([lsPointsChoose], np.int32)  # pts是多边形的顶点列表（顶点集）
     pts = pts.reshape((-1, 1, 2))
@@ -203,14 +194,14 @@ if __name__ == '__main__':
                                   font=font)  # 参数1：打印坐标，参数2：文本，参数3：字体颜色，参数4：字体
                         j += row_ledge
                 # --------------PIL图片转cv2 图片--------------
-                texted_bg = cv2.cvtColor(np.array(white_bg), cv2.COLOR_RGB2BGR)
+                text_frame = cv2.cvtColor(np.array(white_bg), cv2.COLOR_RGB2BGR)
                 cv2.namedWindow('text', 1)
                 # cv2.resizeWindow('text', 1920-img.shape[1], 1080-325-100)
                 cv2.moveWindow('text', 200, img.shape[0] + 32)
                 font = cv2.FONT_HERSHEY_SIMPLEX
-                cv2.imshow('text', texted_bg)
+                cv2.imshow('text', text_frame)
                 # -----------循环检测鼠标移动点--------------------------------
-                while (1):
+                while 1:
                     # -----------src窗口相关------------------------------------
                     cv2.namedWindow('src', 1)  # , cv2.WINDOW_NORMAL)
                     # cv2.resizeWindow('src', 1000, 800)  # 调整窗口大小
