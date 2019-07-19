@@ -157,6 +157,8 @@ if __name__ == '__main__':
                 info = '检查号：{}, 图片目录：{}'.format(ck_id, img_path)
                 info1 = '按R重画，按空格下一张或者跳过，按Q上一张(需要重新运行程序)，按ESC退出'
                 img = cv2.imread(img_path)
+                if img is None:
+                    break
                 # time.sleep(0.05)
                 img2 = img.copy()
                 # ---------------图像预处理，设置其大小---------------------------
@@ -167,8 +169,9 @@ if __name__ == '__main__':
                 # --------------PIL图片上打印汉字--------------
                 with open(r'./report.csv', 'r') as f:
                     for df in pd.read_csv(f, chunksize=10000):
-                        s = df.loc[df['check_id'] == ck_id, :]
-                        a = s.DES
+                        # s = df.loc[df['check_id'] == ck_id, :]
+                        # a = s.DES
+                        a = df.DES[df.check_id == ck_id]
                         # print(a)
                 j = 2*row_ledge
                 white_bg = Image.new('RGB', (1700, 200), 'white')  # 定义文字框背景
