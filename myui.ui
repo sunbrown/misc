@@ -186,6 +186,18 @@ height:40px;
 font: 30pt &quot;楷体&quot;;
 color: rgb(0, 0, 127);</string>
                   </property>
+                  <property name="buttonSymbols">
+                   <enum>QAbstractSpinBox::UpDownArrows</enum>
+                  </property>
+                  <property name="specialValueText">
+                   <string/>
+                  </property>
+                  <property name="showGroupSeparator" stdset="0">
+                   <bool>false</bool>
+                  </property>
+                  <property name="suffix">
+                   <string/>
+                  </property>
                   <property name="minimum">
                    <number>6</number>
                   </property>
@@ -194,6 +206,9 @@ color: rgb(0, 0, 127);</string>
                   </property>
                   <property name="singleStep">
                    <number>1</number>
+                  </property>
+                  <property name="value">
+                   <number>6</number>
                   </property>
                  </widget>
                 </item>
@@ -539,10 +554,11 @@ color: rgb(41, 36, 33);</string>
 border-radius:10px;
 font: 20pt &quot;楷体&quot;;
 color: rgb(41, 36, 33);
+
 </string>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;单纯性阑尾炎&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;单纯性阑尾炎&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
@@ -580,7 +596,7 @@ color: rgb(41, 36, 33);</string>
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'楷体'; font-size:20pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;左键&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#ff0000;&quot;&gt;、&lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;右键：&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#000000;&quot;&gt;勾画横、纵断灰阶图 &lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;滚轮、Q、E：&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#000000;&quot;&gt;切换图片 &lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;S：&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#000000;&quot;&gt;保存 &lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;R、F：&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#000000;&quot;&gt;切换病人 &lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;W&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#ff0000;&quot;&gt;：&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#000000;&quot;&gt;清除画布 &lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;A&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#ff0000;&quot;&gt;、&lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;D：&lt;/span&gt;&lt;span style=&quot; font-size:18pt; color:#000000;&quot;&gt;分别保存横断、纵断彩色原图&lt;/span&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ff0000;&quot;&gt;ESC:&lt;/span&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;退出&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>

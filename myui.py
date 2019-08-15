@@ -122,9 +122,14 @@ class Ui_MainWindow(object):
 "height:40px;\n"
 "font: 30pt \"楷体\";\n"
 "color: rgb(0, 0, 127);")
+        self.spinBox.setButtonSymbols(QtWidgets.QAbstractSpinBox.UpDownArrows)
+        self.spinBox.setSpecialValueText("")
+        self.spinBox.setProperty("showGroupSeparator", False)
+        self.spinBox.setSuffix("")
         self.spinBox.setMinimum(6)
         self.spinBox.setMaximum(15)
         self.spinBox.setSingleStep(1)
+        self.spinBox.setProperty("value", 6)
         self.spinBox.setObjectName("spinBox")
         self.verticalLayout_3.addWidget(self.spinBox)
         self.pushButton_2 = QtWidgets.QPushButton(self.widget4)
@@ -311,6 +316,7 @@ class Ui_MainWindow(object):
 "border-radius:10px;\n"
 "font: 20pt \"楷体\";\n"
 "color: rgb(41, 36, 33);\n"
+"\n"
 "")
         self.label_11.setObjectName("label_11")
         self.verticalLayout_15.addWidget(self.label_11)
@@ -387,11 +393,11 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "无"))
         self.label_9.setText(_translate("MainWindow", "有"))
         self.label_10.setText(_translate("MainWindow", "1"))
-        self.label_11.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">单纯性阑尾炎</p></body></html>"))
+        self.label_11.setText(_translate("MainWindow", "<html><head/><body><p>单纯性阑尾炎</p></body></html>"))
         self.start.setText(_translate("MainWindow", "开始"))
         self.textBrowser_2.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'楷体\'; font-size:20pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p></body></html>"))
+"<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">左键</span><span style=\" font-size:18pt; color:#ff0000;\">、</span><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">右键：</span><span style=\" font-size:18pt; color:#000000;\">勾画横、纵断灰阶图 </span><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">滚轮、Q、E：</span><span style=\" font-size:18pt; color:#000000;\">切换图片 </span><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">S：</span><span style=\" font-size:18pt; color:#000000;\">保存 </span><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">R、F：</span><span style=\" font-size:18pt; color:#000000;\">切换病人 </span><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">W</span><span style=\" font-size:18pt; color:#ff0000;\">：</span><span style=\" font-size:18pt; color:#000000;\">清除画布 </span><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">A</span><span style=\" font-size:18pt; color:#ff0000;\">、</span><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">D：</span><span style=\" font-size:18pt; color:#000000;\">分别保存横断、纵断彩色原图</span><span style=\" font-size:18pt;\"> </span><span style=\" font-size:18pt; font-weight:600; color:#ff0000;\">ESC:</span><span style=\" font-size:18pt;\">退出</span></p></body></html>"))
 

@@ -33,8 +33,10 @@ class mywindow(QMainWindow, Ui_MainWindow):
         self.history_path = './history.txt'
         self.save_root = 'E:/result'
         self.save_dir = ''
+        self.csv_out_path = './label_result.csv'
         self.count = 0
         self.all_count = 0
+        self.create_csv()
         self.create_history()
         self.csv_in = [0, 6, '双层', '液体', '有', '无', '无', '无', '无', '有', 1, 'H']
 
@@ -48,6 +50,12 @@ class mywindow(QMainWindow, Ui_MainWindow):
         self.pushButton_8.clicked.connect(self.btn8)
         self.pushButton_9.clicked.connect(self.btn9)
         self.pushButton_10.clicked.connect(self.btn10)
+
+    def create_csv(self):
+        if not os.path.exists(self.csv_out_path):
+            df2 = pd.DataFrame(columns=['Check_ID', '直径', '管壁层次', '阑尾腔内', '周围系膜肿胀', '周围肿胀形式', '回盲部肠管肿胀',\
+                                        '腹腔游离积液', '淋巴结胀大', '肠管扩张', '阑尾炎类别', '成像角度'])
+            df2.to_csv(self.csv_out_path, index=False, encoding='gbk')
 
     # 读取进度文件（history.txt）
     def create_history(self):
@@ -63,6 +71,8 @@ class mywindow(QMainWindow, Ui_MainWindow):
         else:  # 进度文件不存在创建一个
             ff = open(self.history_path, 'w+')
             ff.close()
+
+
 
     # 保存进度（把self.im_dex保存在history.txt中）
     def save_history(self):
@@ -88,17 +98,12 @@ class mywindow(QMainWindow, Ui_MainWindow):
             self.save_dir = os.path.join(self.save_root, self.dir)
             (self.count, self.all_count, self.flag4) = self.where_now()
             self.info_1 = '总数:{3},当前总进度:{4}\n检查号:{0},病人进度:{1}/{2}'.\
-                format(self.ck_id, self.count, self.all_count, self.file_num, self.im_idx)
+                format(self.ck_id, self.count, self.all_count, self.file_num, self.im_idx+1)
             self.info_2 = '按R重画，按空格下一张或者跳过，按Q上一张(需要重新运行程序)，按ESC退出'
             self.textBrowser_1.setText(self.info_1)
             df = pd.read_csv('appendix2008-2018.csv', encoding='gbk')
             a = df.DES[df.ID == str(self.ck_id)]
 
-            # with open(os.path.join(sys.path[0], 'report.csv'), 'r') as f:
-            #     for df in pd.read_csv(f, chunksize=10000):
-            #         # s = df.loc[df['check_id'] == ck_id, :]
-            #         # a = s.DES
-            #         a = df.DES[df.check_id == int(self.ck_id)]
             self.textBrowser_3.clear()
             for i in a:
                 self.textBrowser_3.append(i)
@@ -106,9 +111,6 @@ class mywindow(QMainWindow, Ui_MainWindow):
 
         except IndexError:
             self.msg1()
-
-    def save_csv(self):
-        pass
 
     def change_color(self):
         if self.flag4[0]:
@@ -138,18 +140,22 @@ class mywindow(QMainWindow, Ui_MainWindow):
         self.csv_in[0] = self.ck_id
         self.csv_in[1] = self.spinBox.text()
         self.csv_in[11] = self.label.mouse_flag
-        # with open(self.save_root, 'a+', newline='') as csv_file:
-        #     content = csv.reader(csv_file, delimiter=' ', quotechar='|')
-        #     for row in content:
-        #         print(', '.join(row))
-        # print(self.csv_in)
-        #
-        # # with open(os.path.join(self.save_root, 'result.csv'), 'a+') as f:
-        # #     for df in pd.read_csv(f, chunksize=10000):
-        # #         # s = df.loc[df['check_id'] == ck_id, :]
-        # #         # a = s.DES
-        # #         a = df.DES[df.check_id == int(self.ck_id)]
-        # #         df.loc
+
+    def save_csv(self):
+        # with open(self.csv_out_path) as ff2:
+        df1 = pd.read_csv(self.csv_out_path, encoding='gbk')
+        # insertRow = pd.DataFrame(self.csv_in)
+        # a = df1.loc[df1.Check_ID == str(self.ck_id)]
+        idx = df1[df1.Check_ID == str(self.ck_id)].index
+        if len(idx) == 0:
+            df1.loc[len(df1)] = self.csv_in
+        else:
+            df1.loc[idx] = self.csv_in
+        df1.to_csv(self.csv_out_path, index=False, encoding='gbk')
+
+    def update_info2(self):
+        info = '提示：鼠标左、右键分别勾画横、纵断灰阶图，按S键保存，滚轮切换图片（不保存）。键盘A、D键分别保存横断、纵断彩色原图图片'
+
 
     def where_now(self):
         name_list = []
@@ -181,8 +187,8 @@ class mywindow(QMainWindow, Ui_MainWindow):
             self.main()
 
     def msg1(self):
-        info = "Index错误，\n点“Yes”清除历史进度重新勾画！\n点击“Open”选择文件夹继续勾画！"
-        reply = QMessageBox().information(self, "警告", info, QMessageBox.Yes | QMessageBox.Open | QMessageBox.No)
+        info = "点“Yes”清除历史进度重新勾画！\n点击“Open”选择文件夹继续勾画！"
+        reply = QMessageBox().information(self, "温馨提示^_^", info, QMessageBox.Yes | QMessageBox.Open | QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.im_idx = 0
             self.main()
@@ -246,16 +252,27 @@ class mywindow(QMainWindow, Ui_MainWindow):
         self.label_10.setText(dic10.get(self.label_10.text()))
         self.label_11.setText(dic11.get(self.label_10.text()))
         self.csv_in[10] = self.label_10.text()
-        print(self.csv_in)
 
     def wheelEvent(self, event):
         # a = event.angleDelta()
         num = int(event.angleDelta().y()/120)
         for i in range(abs(num)):
             if num > 0:
-                self.up_folder()
+                try:
+                    self.im_idx -= 1
+                    if self.im_idx < 0:
+                        self.im_idx = 0
+                    self.refresh()
+                except IndexError:
+                    pass
             else:
-                self.down_folder()
+                try:
+                    self.im_idx += 1
+                    if self.im_idx > self.file_num - 1:
+                        self.im_idx = self.file_num - 1
+                    self.refresh()
+                except IndexError:
+                    pass
 
     def down_folder(self):
         try:
@@ -280,16 +297,15 @@ class mywindow(QMainWindow, Ui_MainWindow):
         if event.key() == Qt.Key_Escape:
             self.save_history()
             self.close()
-        if event.key() == Qt.Key_A:  # A键上一张
+        if event.key() == Qt.Key_Q:  # A键上一张
             try:
                 self.im_idx -= 1
                 if self.im_idx < 0:
                     self.im_idx = 0
                 self.refresh()
-
             except IndexError:
                 pass
-        if event.key() == Qt.Key_D:  # D键下一张
+        if event.key() == Qt.Key_E:  # D键下一张
             try:
                 self.im_idx += 1
                 if self.im_idx > self.file_num - 1:
@@ -315,9 +331,10 @@ class mywindow(QMainWindow, Ui_MainWindow):
                 if self.im_idx > self.file_num - 1:
                     self.im_idx = self.file_num - 1
                 self.refresh()
+                self.save_csv()
             except FileNotFoundError or IndexError:
                 pass
-        if event.key() == Qt.Key_Q:  # Q键保存彩色图C_H.jpg
+        if event.key() == Qt.Key_A:  # Q键保存彩色图C_H.jpg
             try:
                 if not os.path.exists(self.save_dir):
                     os.makedirs(self.save_dir)
@@ -329,7 +346,7 @@ class mywindow(QMainWindow, Ui_MainWindow):
                 self.refresh()
             except IOError:
                 pass
-        if event.key() == Qt.Key_E:  # Q键保存彩色图C_H.jpg
+        if event.key() == Qt.Key_D:  # Q键保存彩色图C_H.jpg
             try:
                 if not os.path.exists(self.save_dir):
                     os.makedirs(self.save_dir)
