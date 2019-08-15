@@ -1,6 +1,6 @@
 from myui import Ui_MainWindow
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QMessageBox
-from PyQt5.QtGui import QPainter, QPixmap, QPen, QPolygon, QPainterPath, QPolygonF
+from PyQt5.QtGui import QPainter, QPixmap, QPen, QPolygon, QPainterPath, QPolygonF, QWheelEvent
 from PyQt5.QtCore import Qt, QPoint
 import os
 import shutil
@@ -87,14 +87,18 @@ class mywindow(QMainWindow, Ui_MainWindow):
             self.dir = '\\'.join(self.split_path[1:-1])
             self.save_dir = os.path.join(self.save_root, self.dir)
             (self.count, self.all_count, self.flag4) = self.where_now()
-            self.info_1 = ' 检查号:{0},病人进度:{1}/{2}'.format(self.ck_id, self.count, self.all_count)
+            self.info_1 = '总数:{3},当前总进度:{4}\n检查号:{0},病人进度:{1}/{2}'.\
+                format(self.ck_id, self.count, self.all_count, self.file_num, self.im_idx)
             self.info_2 = '按R重画，按空格下一张或者跳过，按Q上一张(需要重新运行程序)，按ESC退出'
             self.textBrowser_1.setText(self.info_1)
-            with open(os.path.join(sys.path[0], 'report.csv'), 'r') as f:
-                for df in pd.read_csv(f, chunksize=10000):
-                    # s = df.loc[df['check_id'] == ck_id, :]
-                    # a = s.DES
-                    a = df.DES[df.check_id == int(self.ck_id)]
+            df = pd.read_csv('appendix2008-2018.csv', encoding='gbk')
+            a = df.DES[df.ID == str(self.ck_id)]
+
+            # with open(os.path.join(sys.path[0], 'report.csv'), 'r') as f:
+            #     for df in pd.read_csv(f, chunksize=10000):
+            #         # s = df.loc[df['check_id'] == ck_id, :]
+            #         # a = s.DES
+            #         a = df.DES[df.check_id == int(self.ck_id)]
             self.textBrowser_3.clear()
             for i in a:
                 self.textBrowser_3.append(i)
@@ -244,6 +248,33 @@ class mywindow(QMainWindow, Ui_MainWindow):
         self.csv_in[10] = self.label_10.text()
         print(self.csv_in)
 
+    def wheelEvent(self, event):
+        # a = event.angleDelta()
+        num = int(event.angleDelta().y()/120)
+        for i in range(abs(num)):
+            if num > 0:
+                self.up_folder()
+            else:
+                self.down_folder()
+
+    def down_folder(self):
+        try:
+            self.im_idx += (self.all_count - self.count + 1)
+            if self.im_idx > self.file_num - 1:
+                self.im_idx = self.file_num - 1
+            self.refresh()
+        except IndexError:
+            pass
+
+    def up_folder(self):
+        try:
+            self.im_idx -= (self.count + 1)
+            if self.im_idx < 0:
+                self.im_idx = 0
+            self.refresh()
+        except IndexError:
+            pass
+
     # 键盘事件
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
@@ -266,6 +297,10 @@ class mywindow(QMainWindow, Ui_MainWindow):
                 self.refresh()
             except IndexError:
                 pass
+        if event.key() == Qt.Key_R:  #
+            self.up_folder()
+        if event.key() == Qt.Key_F:  #
+            self.down_folder()
         if event.key() == Qt.Key_W:  # W键删除mask
             try:
                 self.refresh()

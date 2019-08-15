@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1210, 891)
+        MainWindow.resize(1737, 925)
         MainWindow.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet("")
@@ -38,7 +38,7 @@ class Ui_MainWindow(object):
         self.textBrowser_1 = QtWidgets.QTextBrowser(self.centralwidget)
         self.textBrowser_1.setStyleSheet("background-color: rgb(230, 230, 230);\n"
 "border-radius:10px;\n"
-"font: 20pt \"楷体\";\n"
+"font: 17pt \"楷体\";\n"
 "color: rgb(176,23,31);")
         self.textBrowser_1.setObjectName("textBrowser_1")
         self.verticalLayout_4.addWidget(self.textBrowser_1)
@@ -353,6 +353,11 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.textBrowser_1.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'楷体\'; font-size:17pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt;\"><br /></p></body></html>"))
         self.label10.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">未勾画:</p></body></html>"))
         self.label3.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">纵断彩色</p></body></html>"))
         self.label0.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">横断灰阶</p></body></html>"))
