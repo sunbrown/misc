@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from PIL import Image
 from tqdm import tqdm
 
@@ -8,7 +8,7 @@ from tqdm import tqdm
 #     img.save(r'F:\jpg1\{}'.format(filename))
 
 
-# -------遍历所有的目录和文件，包括子文件夹------------)
-for read_path, dirs, files in os.walk(r"D:/greyimage"):
-    for file in files:
-        print( os.path.join(read_path, file))
+# # -------遍历所有的目录和文件，包括子文件夹------------)
+# for read_path, dirs, files in os.walk(r"D:/greyimage"):
+#     for file in files:
+#         print(os.path.join(read_path, file))

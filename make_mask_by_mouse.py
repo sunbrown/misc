@@ -118,7 +118,7 @@ def roi_by_mouse():
 
 
 if __name__ == '__main__':
-    read_path = r'D:\greyimage'
+    read_path = r'E:\307993'
     csv_path = r'report.csv'
     row_ledge = 16  # 定义行间距和字体大小
     row_length = 115  # 定义行长度
